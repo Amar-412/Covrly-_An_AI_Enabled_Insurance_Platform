@@ -15,16 +15,20 @@ The system will automatically detect disruption events and trigger payouts witho
 - Accident insurance 
 - Vehicle repair insurance 
 
-The insurance only covers income loss caused by environmental disruptions and social disruptions. 
+---
 
-- Unplanned curfews  
-- local strikes  
+## The insurance only covers income loss caused by environmental disruptions and social disruptions. 
+
+- Unplanned curfews/local strikes  
 - sudden market/zone closures 
+- Unprecedented heavy Rainfall
+- Inaccessible Deliverly location
 
 which contribute to the inability to access pickup/drop locations 
 
+---
 
-Selected Delivery Category   --- Food Delivery Gigs (Zomato / Instamart) 
+### Selected Delivery Category   --->  Food Delivery Gigs (Zomato / Instamart) 
 
 ---
 
@@ -115,7 +119,7 @@ Coverage: ₹300–₹500 payout
 
 ---
 
-Customer Journey Map 
+### Customer Journey Map 
 
 <p align="center">
   <img src="assets/Customer_Journey_Map.jpg.jpeg" width="700"/>
