@@ -61,7 +61,7 @@ Vehicle: Motorcycle
 
 ### Income Loss Scenario 
 
-During heavy rain days, he completes only 8–10 deliveries instead of 30, losing ₹400–₹600 income. 
+During heavy rain days, he completes only 8–10 deliveries instead of 30, losing ₹200–₹400 income. 
 
 ### Possible Parametric Triggers 
 
@@ -119,7 +119,7 @@ Coverage: ₹300–₹500 payout
 
 ---
 
-### Customer Journey Map 
+## Customer Journey Map 
 
 <p align="center">
   <img src="assets/Customer_Journey_Map.jpg.jpeg" width="700"/>
@@ -138,7 +138,7 @@ Coverage: ₹300–₹500 payout
 
 - If disruption conditions exceed predefined thresholds, the system activates a parametric trigger. 
 - The system automatically calculates the payout amount. 
-- Payment is transferred directly to the worker’s account. 
+- After claiming and proper validation payment is transferred directly to the worker’s account. 
 
 <p align="center">
   <img src="assets/workflow.jpg" width="700"/>
@@ -180,7 +180,7 @@ Parametric insurance automatically activates payouts when predefined conditions 
 | Trigger Condition        | Payout Activation |
 |------------------------|------------------|
 | Rainfall > 100 mm      | Payout activated |
-| Air Quality Index > 400| Payout activated |
+| Air Quality Index >1000| Payout activated |
 | Temperature > 45°C     | Payout activated |
 | Cyclone / Flood Alert  | Payout activated |
 
@@ -279,6 +279,155 @@ We must rely on multiple statistics which will work as a stimulus for the detect
 ```
 ---
 
+## Adversarial Defense & Anti-Spoofing Strategy
+
+To mitigate advanced GPS spoofing attacks and coordinated fraud attempts, the system adopts a multi-layered behavioral verification approach instead of relying solely on GPS coordinates.
+
+---
+
+### a. Movement Anomaly Detection
+
+The system continuously analyzes time-series location data to detect abnormal movement patterns that indicate possible spoofing.
+
+#### Key Checks
+
+- Sudden location jumps:
+  - Large distance changes within a very short time interval  
+
+- Unrealistic speed estimation:
+  - Speed exceeding physical limits for a delivery vehicle  
+
+- Unnatural movement patterns:
+  - Teleportation-like transitions  
+  - Missing intermediate GPS points  
+  - Perfect straight-line paths indicating synthetic movement  
+
+#### Detection Logic
+
+```pseudo
+IF (Distance Change > X km in < Y seconds)
+OR (Speed > Max Threshold)
+OR (Missing Intermediate Points)
+THEN Movement Anomaly Detected
+```
+---
+
+### b. Behavioral Consistency Analysis
+
+The system evaluates whether the rider’s activity aligns with realistic delivery behavior by analyzing session-level patterns.
+
+#### Signals Considered
+
+- Continuous movement vs prolonged inactivity  
+- Frequency and consistency of location updates  
+
+#### Key Observations
+
+- Genuine delivery riders exhibit continuous and dynamic movement patterns  
+- Regular location updates with gradual transitions   
+
+- Suspicious users often show:
+  - Long periods of inactivity followed by sudden claim initiation  
+  - Irregular or sparse location updates   
+
+#### Detection Logic
+
+```pseudo
+IF (User claims disruption)
+AND (Movement History shows prolonged inactivity)
+AND (Low frequency of location updates)
+THEN Suspicious Behavior
+```
+---
+
+### c. Risk Scoring Engine
+
+The system assigns a cumulative fraud risk score based on detected anomalies and behavioral inconsistencies.
+
+#### Example Weights
+
+| Signal | Weight |
+|--------|--------|
+| Location jump | +0.3 |
+| High speed | +0.2 |
+| Static behavior | +0.2 |
+| Pattern anomaly | +0.3 |
+
+#### Decision Logic
+
+```pseudo
+IF (Fraud Score < 0.3)
+→ Auto Approve
+
+IF (0.3 ≤ Fraud Score < 0.7)
+→ Soft Verification
+
+IF (Fraud Score ≥ 0.7)
+→ High Risk Flag
+```
+
+---
+
+### d. Geotagged Selfie Verification
+
+When the fraud risk score crosses a defined threshold, the system initiates a real-time verification step to confirm the user's authenticity.
+
+#### Process
+
+- The user is prompted to capture a live selfie  
+- The image is geotagged and timestamped  
+- Additional checks may include:
+  - Liveness detection (blink or movement verification)  
+  - Environmental consistency checks
+
+#### Purpose
+
+This step ensures that:
+
+- The user is physically present at the claimed location  
+- The claim is being made in real-time  
+- Spoofed or automated claims are filtered out  
+
+
+#### User Experience Consideration
+
+- Verification is only triggered when necessary  
+- The process is designed to be quick and minimally intrusive  
+- Genuine users can complete verification within seconds     
+
+#### Trigger Logic
+
+```pseudo
+IF (Fraud Score ≥ Threshold)
+THEN Request Geotagged Selfie
+```
+---
+
+### e. Final Decision Model
+
+The system combines movement analysis, behavioral consistency, and verification results to determine claim validity.
+
+#### Decision Logic
+
+```pseudo
+IF (Movement Natural)
+AND (Speed Realistic)
+AND (Behavior Pattern Validation)
+THEN Approve Claim
+
+ELSE
+    Increase Fraud Score
+    IF (Threshold Crossed)
+    THEN Trigger Selfie Verification
+```
+#### Detection Workflow
+
+<p align="center">
+  <img src="assets/gps_spoofing_sol.png" width="300"/>
+</p>
+
+---
+
 # 8. Tech Stack 
 
 ## Frontend (Mobile) 
@@ -295,6 +444,28 @@ We must rely on multiple statistics which will work as a stimulus for the detect
 ## Backend 
 
 - FastAPI (Python) – REST APIs  
+
+---
+
+## Event-Driven Architecture with Apache Kafka
+
+To support real-time fraud detection, disruption monitoring, and instant claim processing, the platform uses an event-driven architecture powered by Apache Kafka.
+
+In this system, every critical action—such as location updates, anomaly detection, and claim initiation—is treated as an event and streamed through Kafka.
+
+This allows different components (AI models, fraud detection, trigger engine) to process data independently and in real time.
+
+
+### Role of Apache Kafka
+
+Apache Kafka is used to stream and process real-time events across the system.
+
+It enables:
+
+- Stream real-time rider location data for movement analysis  
+- Trigger fraud detection pipelines when anomalies are detected  
+- Process claim-related events asynchronously  
+- Enable instant parametric claim triggering based on external disruptions
 
 ---
 
@@ -325,3 +496,11 @@ We must rely on multiple statistics which will work as a stimulus for the detect
 ## Payments 
 
 - Razorpay test mode
+---
+
+## The Protoype - Covrly
+
+#### HereBy, We are attaching the link of our protoype created on Figma. 
+##### The protoype is aided with button/Page navigation and efforts to correctly and closely simulate the working of the Real Application.
+
+The Protoype Link -->  https://www.figma.com/proto/IM3m6sVzgNUzK4ue1wnpyG/GigShield-Worker-App?node-id=0-1&t=QFABHBgN9znTk8mq-1
